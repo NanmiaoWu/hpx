@@ -9,9 +9,11 @@ source $SPACK_ROOT/share/spack/setup-env.sh
 export CRAYPE_LINK_TYPE=dynamic
 
 module load daint-mc
-module switch PrgEnv-cray PrgEnv-icc
 module load Boost
 module load hwloc/.2.0.3
+# We load the intel module last, since the Boost module otherwise loads the gnu
+# module again
+module switch PrgEnv-gnu PrgEnv-intel
 spack load cmake
 spack load ninja
 
