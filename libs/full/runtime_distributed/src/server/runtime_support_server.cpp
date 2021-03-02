@@ -31,6 +31,7 @@
 #include <hpx/prefix/find_prefix.hpp>
 #include <hpx/runtime_components/console_logging.hpp>
 #include <hpx/runtime_configuration/component_commandline_base.hpp>
+#include <hpx/runtime_configuration/component_factory_base.hpp>
 #include <hpx/runtime_configuration/ini.hpp>
 #include <hpx/runtime_configuration/static_factory_data.hpp>
 #include <hpx/runtime_distributed.hpp>
