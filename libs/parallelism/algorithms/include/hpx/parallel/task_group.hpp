@@ -121,7 +121,6 @@ namespace hpx {
         typedef hpx::lcos::local::spinlock mutex_type;
 
         explicit task_group(ExPolicy const& policy = ExPolicy())
-          : id_(threads::get_self_id())
         {
         }
 
@@ -315,7 +314,6 @@ namespace hpx {
         mutable mutex_type mtx_;
         std::vector<hpx::future<void>> tasks_;
         parallel::exception_list errors_;
-        threads::thread_id_type id_;
     };
 
 
