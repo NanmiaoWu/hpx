@@ -97,6 +97,7 @@ set(include_headers
     hpx/include/runtime.hpp
     hpx/include/serialization.hpp
     hpx/include/sync.hpp
+    hpx/include/task_group.hpp
     hpx/include/thread_executors.hpp
     hpx/include/threadmanager.hpp
     hpx/include/threads.hpp
@@ -111,6 +112,7 @@ set(include_headers
     hpx/optional.hpp
     hpx/runtime.hpp
     hpx/task_block.hpp
+    hpx/task_group.hpp
     hpx/tuple.hpp
     hpx/type_traits.hpp
 )

@@ -18,6 +18,7 @@
 #include <hpx/optional.hpp>
 #include <hpx/runtime.hpp>
 #include <hpx/task_block.hpp>
+#include <hpx/task_group.hpp>
 #include <hpx/tuple.hpp>
 #include <hpx/type_traits.hpp>
 
