@@ -122,7 +122,6 @@ namespace hpx {
 
         explicit task_group(ExPolicy const& policy = ExPolicy())
           : id_(threads::get_self_id())
-          , policy_(policy)
         {
         }
 
@@ -195,17 +194,6 @@ namespace hpx {
         /// \endcond
 
     public:
-        /// Refers to the type of the execution policy used to create the
-        /// \a task_group.
-        typedef ExPolicy execution_policy;
-
-        /// Return the execution policy instance used to create this
-        /// \a task_group
-        execution_policy const& get_execution_policy() const
-        {
-            return policy_;
-        }
-
         /// Causes the expression f() to be invoked asynchronously.
         /// The invocation of f is permitted to run on an unspecified thread
         /// in an unordered fashion relative to the sequence of operations
@@ -241,7 +229,7 @@ namespace hpx {
         {
 
             hpx::future<void> result =
-                parallel::execution::async_execute(policy_.executor(), std::forward<F>(f),
+                parallel::execution::async_execute(std::forward<F>(f),
                     std::forward<Ts>(ts)...);
 
             std::lock_guard<mutex_type> l(mtx_);
@@ -282,11 +270,11 @@ namespace hpx {
         ///        described in Exception Handling.
         ///
         template <typename Executor, typename F, typename... Ts>
-        void run(Executor& exec, F&& f, Ts&&... ts)
+        void run(F&& f, Ts&&... ts)
         {
 
             hpx::future<void> result = parallel::execution::async_execute(
-                exec, std::forward<F>(f), std::forward<Ts>(ts)...);
+                std::forward<F>(f), std::forward<Ts>(ts)...);
 
             std::lock_guard<mutex_type> l(mtx_);
             tasks_.push_back(std::move(result));
@@ -322,32 +310,12 @@ namespace hpx {
             wait_for_completion();
         }
 
-        /// Returns a reference to the execution policy used to construct this
-        /// object.
-        ///
-        /// Precondition: this shall be the active task_group.
-        ///
-        ExPolicy& policy()
-        {
-            return policy_;
-        }
-
-        /// Returns a reference to the execution policy used to construct this
-        /// object.
-        ///
-        /// Precondition: this shall be the active task_group.
-        ///
-        ExPolicy const& policy() const
-        {
-            return policy_;
-        }
 
     private:
         mutable mutex_type mtx_;
         std::vector<hpx::future<void>> tasks_;
         parallel::exception_list errors_;
         threads::thread_id_type id_;
-        ExPolicy policy_;
     };
 
 
