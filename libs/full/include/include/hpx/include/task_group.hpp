@@ -7,4 +7,4 @@
 #pragma once
 
 #include <hpx/config.hpp>
-#include <hpx/task_group.hpp>
+#include <hpx/parallel/task_group.hpp>
