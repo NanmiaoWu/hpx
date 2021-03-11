@@ -1,4 +1,4 @@
-//  Copyright (c) 2007-2017 Hartmut Kaiser
+//  Copyright (c) 2007-2021 Hartmut Kaiser
 //
 //  SPDX-License-Identifier: BSL-1.0
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying
@@ -69,10 +69,7 @@ namespace hpx {
     //};
 
     /// The class task_group defines an interface for forking and
-    /// joining parallel tasks. The \a define_task_group and
-    /// \a define_task_group_restore_thread
-    /// function templates create an object of type task_group and
-    /// pass a reference to that object to a user-provided callable object.
+    /// joining parallel tasks.
     ///
     /// An object of class \a task_group cannot be constructed,
     /// destroyed, copied, or moved except by the implementation of the task
@@ -132,16 +129,12 @@ namespace hpx {
 
         void wait_for_completion()
         {
-            typedef typename parallel::util::detail::algorithm_result<ExPolicy>::type
-                result_type;
+            typedef typename parallel::util::detail::algorithm_result<ExPolicy>
+                ::type result_type;
             typedef hpx::traits::is_future<result_type> is_fut;
             wait_for_completion(is_fut());
         }
 
-        ~task_group()
-        {
-            wait_for_completion();
-        }
 
         task_group(task_group const&) = delete;
         task_group& operator=(task_group const&) = delete;
@@ -193,6 +186,11 @@ namespace hpx {
         {
         }
 
+        ~task_group()
+        {
+            wait_for_completion();
+        }
+
         /// Causes the expression f() to be invoked asynchronously.
         /// The invocation of f is permitted to run on an unspecified thread
         /// in an unordered fashion relative to the sequence of operations
@@ -227,8 +225,8 @@ namespace hpx {
         void run(F&& f, Ts&&... ts)
         {
 
-            hpx::future<void> result =
-                parallel::execution::async_execute(std::forward<F>(f),
+            execution::parallel_executor exec;
+            hpx::future<void> result = exec.async_execute(std::forward<F>(f),
                     std::forward<Ts>(ts)...);
 
             std::lock_guard<mutex_type> l(mtx_);
@@ -271,8 +269,8 @@ namespace hpx {
         template <typename Executor, typename F, typename... Ts>
         void run(F&& f, Ts&&... ts)
         {
-
-            hpx::future<void> result = parallel::execution::async_execute(
+            execution::parallel_executor exec;
+            hpx::future<void> result = exec.async_execute(
                 std::forward<F>(f), std::forward<Ts>(ts)...);
 
             std::lock_guard<mutex_type> l(mtx_);
