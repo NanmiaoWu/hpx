@@ -120,10 +120,6 @@ namespace hpx {
         /// \cond NOINTERNAL
         typedef hpx::lcos::local::spinlock mutex_type;
 
-        explicit task_group(ExPolicy const& policy = ExPolicy())
-        {
-        }
-
         void wait_for_completion(std::false_type)
         {
             when();
@@ -193,6 +189,10 @@ namespace hpx {
         /// \endcond
 
     public:
+        task_group(ExPolicy const& policy = ExPolicy())
+        {
+        }
+
         /// Causes the expression f() to be invoked asynchronously.
         /// The invocation of f is permitted to run on an unspecified thread
         /// in an unordered fashion relative to the sequence of operations
