@@ -19,11 +19,11 @@ int call_me(int arg)
     return arg;
 }
 
-void void_call_me(int arg) {}
+void void_call_me(int) {}
 
-int main(int argc, char* argv[])
+int main(int, char*[])
 {
-    // The function pointer is casted to a std::ptrdiff_t to avoid compilation
+    // The function pointer is casted to a std::size_t to avoid compilation
     // problems complaining about raw pointers being used as action parameters.
     // The invoke_function facilities will cast this back to the correct
     // function pointer on the receiving end.
@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
                 int>;
 
         hpx::future<int> result = hpx::async<action_type>(
-            hpx::find_here(), reinterpret_cast<std::ptrdiff_t>(&call_me), 42);
+            hpx::find_here(), reinterpret_cast<std::size_t>(&call_me), 42);
 
         std::cout << "the action invocation returned: " << result.get() << "\n";
     }
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
             decltype(&void_call_me), int>;
 
         hpx::future<void> result = hpx::async<action_type>(hpx::find_here(),
-            reinterpret_cast<std::ptrdiff_t>(&void_call_me), 42);
+            reinterpret_cast<std::size_t>(&void_call_me), 42);
 
         result.get();
     }
